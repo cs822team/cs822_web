@@ -1,46 +1,109 @@
 <!DOCTYPE html>
 <html>
    <head>
-      <title>Search yoU Want</title>
+      <title>SQA</title>
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
       <!-- 引入 Bootstrap -->
      <link href="css/bootstrap.min.css" rel="stylesheet" type="text/css">
 	  <!-- jQuery (Bootstrap 的 JavaScript 插件需要引入 jQuery) -->
-      <script src="https://code.jquery.com/jquery.js"></script>
+      <script src="js/jquery.js"></script>
       <!-- 包括所有已编译的插件 -->
       <script src="js/bootstrap.min.js"></script>
 
-
-   </head>
+	  <script type="text/javascript">
+	  	$(document).ready(function(){
+			$(function(){
+				$('[data-toggle="popover"]').popover()
+			});
+			$('[id^="asd_"]').mouseover(function(){
+				var value = $(this).children("input").val();
+				 $(this).text(value);
+			});
+			$('[id^="asd_"]').mouseout(function(){
+				var value = $(this).text();
+				var val = parseInt(value/1000);
+				if(val>0){
+					val = val+"k";
+				}
+				$(this).html('<input class="badge" value="'+value+'" >'+val+'</input>');
+			});
+			$("#susername").blur(function(){
+				var val = $(this).val();
+				if(val=="" || val==null){
+				}else{
+					if(val.length<5 || val.length>12){
+						$("#ssusername").html(" <spane class='alert alert-danger' role='alert'>Legth should belong 5 - 12</span>");
+					}else{
+						$("#sspassword").html("");
+					}
+				}
+			});
+			$("#spassword").blur(function(){
+				var val = $(this).val();
+				if(val=="" || val==null){
+				}else{
+					if(val.length<5 || val.length>12){
+						$("#sspassword").html(" <spane class='alert alert-danger' role='alert'>Legth should belong 5 - 12</span>");
+					}else{
+						$("#sspassword").html("");
+					}
+				}
+			});
+			$("#confirmpassword").blur(function(){
+				var cval = $(this).val();
+				var val = $("#spassword").val();
+				if(cval=="" || cval==null){
+				}else{
+					if(val!=cval){
+						$("#ssc").html(" <spane class='alert alert-danger' role='alert'>Password were not same</span>");
+					}else{
+						$("#ssc").html("");
+					}
+				}
+			});
+			$("#semail").blur(function(){
+				var val = $(this).val();
+				if(val=="" || val==null){
+				}else{
+					if(!val.match(/^\w+((-\w+)|(\.\w+))*\@[A-Za-z0-9]+((\.|-)[A-Za-z0-9]+)*\.[A-Za-z0-9]+$/)){
+						$("#ssemail").html(" <spane class='alert alert-danger' role='alert'>Mali format is wrong</span>");
+					}else{
+						$("#ssemail").html("");
+					}
+				}
+			});
+			
+		});
+		
+		
+	  </script>
    <body>
    <div class="container">
    <div class="row">
 	 <div class="col-md-12">	
 		<ul class="nav nav-pills">
-           <li class="active"><a href="index.html">LOGO</a></li>
-           <li><a href="#">Q&A</a></li>
-           <li><a href="#">JOB</a></li>
-           <li><a href="#">SUPPORT</a></li>
-           <form class="form-search navbar-left">
-   				<input class="input-medium search-query" type="text" placeholder="Search  U Want"/> <button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-search"></span>SEARCH</button>
-            </form>
+           <li class="active"><a href="#">LOGO</a></li>
+
+         
             
+           <form class="form-search navbar-left drdropdown pull-right">
+   				<input class="input-medium search-query" type="text" placeholder="Search  U Want"/> <button type="submit" class="btn btn-primary" id="but1"><span class="glyphicon glyphicon-search"></span>SEARCH</button>
+            </form>
+
            
-           	<button class="btn btn-primary btn-sm drdropdown pull-right" data-toggle="modal" 
-   				data-target="#myModal">
-  				log in 
-			</button>
-            <button class="btn btn-primary btn-sm drdropdown pull-right" data-toggle="modal" 
-   				data-target="#registModal">
-  				sign up
-			</button>
+            <li class="drdropdown pull-right"><a href="#" data-toggle="modal" 
+   				data-target="#myModal">log in</a></li>
+            <li class="drdropdown pull-right"><a href="#" data-toggle="modal" 
+   				data-target="#registModal">sign up</a></li>
+            <li class="drdropdown pull-right"><a href="#"> help </a></li>
+             
            
            <li class="dropdown pull-right">
               <a class="dropdown-toggle" data-toggle="dropdown" href="#">
                  ACCOUNT <span class="caret "></span><span class="badge ">2</span>
               </a>
               <ul class="dropdown-menu">
-                 <li><a href="user_page.html">MY SETTING</a></li>
+                 <li><a href="#">MY SETTING</a></li>
                  <li><a href="#">MY Q&A</a></li>
                  <li><a href="#">Regist</a></li>
                  <li class="divider"></li>
@@ -164,11 +227,31 @@
         </table>
         </div>
         <div class="col-md-3 ">
-		<a class="btn btn-success btn-lg" href="ask.html" role="button">ask a question</a>
-        <img src="img/2.jpg"
-   class="img-rounded">
 
-        
+			<div class="jumbotron">
+  				<h1>Find Why?</h1>
+  				<p><a class="btn btn-primary btn-lg" href="#" role="button">ask question</a></p>
+			</div>
+		<table width="27%" class="table table-striped">
+           <thead>
+      <tr>
+      	<div class="btn-group ">
+         
+         <th><button type="button" class="btn  btn-info pull-left  ">Hot</button>           <button type="button" class="btn btn-default  pull-left">New</button></th>
+         </div>
+         
+      </tr>
+   	</thead>
+         <tbody>
+      <tr>
+         <td ><a href="#">How can i pass this exam!!! harry!!</a></td>
+      	 </tr>
+      <tr>
+         
+         <td ><a href="#">Some thing wrong with my ipad,who can help me!</a></td>
+   		   </tr>
+       </tbody>
+     </table>
          
         </div>
      </div>
@@ -238,7 +321,7 @@
                   <label for="usertname" class="col-sm-2 control-label">name</label>
                   <div class="col-sm-10">
                      <input type="text" class="form-control" id="username" 
-                        placeholder="please input a valid name(6-12)">
+                        placeholder="please input your displayname or email ">
                   </div>
                </div>
                <div class="form-group">
@@ -269,7 +352,7 @@
             <button type="button" class="btn btn-default" 
                data-dismiss="modal">close
             </button>
-
+	
          </div>
       </div><!-- /.modal-content -->
 </div><!-- /.modal -->
@@ -286,38 +369,45 @@
                   &times;
             </button>
             <h4 class="modal-title" id="myModalLabel">
-               log in 
+               sign up
             </h4>
          </div>
          <div class="modal-body">
                <form class="form-horizontal" role="form">
                <div class="form-group">
                   <label for="usertname" class="col-sm-2 control-label">name</label>
-                  <div class="col-sm-10">
-                     <input type="text" class="form-control" id="username" 
-                        placeholder="please input a valid name(6-12)">
+                  <div class="col-lg-5 " >
+                     <input type="text" class="form-control "  id="susername" 
+                        placeholder="input your username/email)">
                   </div>
+                   <div id="ssusername" class="col-sm-5"></div>
+
                </div>
                <div class="form-group">
                   <label for="inputPassword" class="col-sm-2 control-label">password</label>
-                  <div class="col-sm-10">
-                     <input type="password" class="form-control" id="inputPassword" 
+                  <div class="col-sm-5">
+                     <input type="password" class="form-control" id="spassword" 
                         placeholder="please input your password">
                   </div>
+                   <div id="sspassword" class="col-sm-5"></div>
                </div>
                <div class="form-group">
                   <label for="input2edPassword" class="col-sm-2 control-label">confirm password</label>
-                  <div class="col-sm-10">
-                     <input type="password" class="form-control" id="confirm password" 
+                  <div class="col-sm-5">
+                     <input type="password" class="form-control" id="confirmpassword" 
                         placeholder="input your password again">
                   </div>
+                  <div id="ssc" class="col-sm-5"></div>
+
                </div>
                 <div class="form-group">
                   <label for="input2edPassword" class="col-sm-2 control-label">Email :</label>
-                  <div class="col-sm-10">
-                     <input type="text" class="form-control" id="Email" 
+                  <div class="col-sm-5">
+                     <input type="text" class="form-control" id="semail" 
                         placeholder="example@example.com">
                   </div>
+                    <div id="ssemail" class="col-sm-5"></div>
+
                </div>
                
                <div class="form-group">
@@ -326,7 +416,7 @@
                   </div>
                </div>
             </form>
-            
+
          </div>
          <div class="modal-footer">
             <button type="button" class="btn btn-default" 
