@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+	<!-- 动态调用：在访问该action时，附带上调用方法。如：／user/helloWord_default!addUI,则会调用addUI方法，而不是hello world方法 -->
+	<!-- struts.enable.DynamicMethodInvocation 将该常量设置为 false 时，将静止动态调用 -->
+	
+	
+	<package name="user" namespace="/user" extends="struts-default">
+	 	<action name="signup" class="com.suw.action.UserAction" method="signup">
+	 		<result name="success" type="redirect">/index.jsp</result>
+	 		<result name="false" type="redirect" >/index.jsp</result>
+	 		
+	 		
+	 	</action>
+	 	<action name="login" class="com.suw.action.UserAction" method="login">
+	 		<result name="success" type="redirect" >/index.jsp</result>
+	 		<result name="false" type="redirect">/index.jsp</result>
+	 		<result name="question" >/jump.jsp</result>
+	 		
+	 	</action>
+	 	
+	 	<action name="logout" class="com.suw.action.UserAction" method="logout">
+	 		<result name="success"  type="redirect">/index.jsp</result>
+	 		<result name="false" type="redirect">/index.jsp</result>
+	 	</action>
+	 	
+	 </package>
+	 
+</struts>
