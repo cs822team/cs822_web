@@ -32,6 +32,17 @@ public class CommentAction {
 	Map<String, Object> session;
 	Map<String, Object> request;
 	
+	
+	private int voteValue;
+	
+	public int getVoteValue() {
+		return voteValue;
+	}
+
+	public void setVoteValue(int voteValue) {
+		this.voteValue = voteValue;
+	}
+	
 	public String add(){
 		if(null==comment){
 			return "false";
@@ -47,6 +58,7 @@ public class CommentAction {
 		commentService.addComment(comment);
 		return "success";
 	}
+	
 	
 	
 	private void initSessionAndRequest(){

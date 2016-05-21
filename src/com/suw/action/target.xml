@@ -9,6 +9,9 @@
 	 	<action name="hotTargets" class="com.suw.action.TargetAction" method="hotTargets">
 	 		<result name="success" type="json"></result>
 	 	</action>
+	 	<action name="matchTargets" class="com.suw.action.TargetAction" method="matchTargets">
+	 		<result name="success" type="json"></result>
+	 	</action>
 	 	
 	 </package>
 	 

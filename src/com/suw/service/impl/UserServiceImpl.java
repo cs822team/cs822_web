@@ -54,6 +54,6 @@ public class UserServiceImpl implements UserService {
 	
 	
 	public User findUser(User user){
-		return baseDAO.get(" from User u where ( u.displayName = ? and u.password = ? ) or (u.email = ? and u.password = ? )", new Object[] { user.getDisplayName() , user.getPassword(),user.getEmail() , user.getPassword() });
+		return baseDAO.get(" from User u where  u.email = ? and u.password = ? ", new Object[] { user.getEmail() , user.getPassword() });
 	};
 }

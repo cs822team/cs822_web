@@ -29,5 +29,6 @@
 		 <mapping class="com.suw.entity.HotTarget" />
 		 <mapping class="com.suw.entity.Comment" />
 		 <mapping class="com.suw.entity.Answer" />
+		 <mapping class="com.suw.entity.Favourite" />
 	</session-factory>
 </hibernate-configuration>

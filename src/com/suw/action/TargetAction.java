@@ -18,6 +18,8 @@ public class TargetAction{
 	@Resource
 	private TargetService targetService;
 	
+	private String tags;
+	
 	Map<String, Object> session;
 	Map<String, Object> request;
 	
@@ -25,6 +27,16 @@ public class TargetAction{
 	
 	public String hotTargets(){
 		targets = targetService.findHotTargets();
+		return "success";
+	}
+	
+	public String matchTargets(){
+		if(null == tags || tags.replace(",", "").trim()==""){
+			hotTargets();
+		}else{
+			targets = targetService.findMatchTargets(tags);
+		}
+		
 		return "success";
 	}
 	
@@ -38,6 +50,14 @@ public class TargetAction{
 	}
 	public void setTargets(List<Target> targets) {
 		this.targets = targets;
+	}
+
+	public String getTags() {
+		return tags;
+	}
+
+	public void setTags(String tags) {
+		this.tags = tags;
 	}
 	
 	

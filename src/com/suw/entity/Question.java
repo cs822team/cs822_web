@@ -47,7 +47,7 @@ public class Question {
 	
 	private List<Comment> comments;
 	private List<Answer> answers;
-	
+	private boolean favourite;
 	
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
@@ -179,6 +179,7 @@ public class Question {
 		this.tags = tags;
 		this.answerCount = answerCount;
 		this.commentCount = commentCount;
+		favourite=false;
 	}
 	
 	public Question(int id,String body,String title) {
@@ -207,6 +208,14 @@ public class Question {
 	public void setAnswers(List<Answer> answers) {
 		this.answers = answers;
 	}
+	@Transient 
+	public boolean getFavourite() {
+		return favourite;
+	}
+	public void setFavourite(boolean favourite) {
+		this.favourite = favourite;
+	}
+	
 	
 	
 	

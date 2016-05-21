@@ -5,6 +5,6 @@ import java.util.List;
 import com.suw.entity.Comment;
 
 public interface CommentService {
-	List<Comment> findCommentsByQuestionId(int questionId);
-	Comment addComment(Comment comment);
+	public List<Comment> findCommentsByQuestionId(int questionId);
+	public Comment addComment(Comment comment);
 }

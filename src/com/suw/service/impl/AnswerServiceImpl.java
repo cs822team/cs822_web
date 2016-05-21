@@ -5,9 +5,11 @@ import java.util.List;
 import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.suw.dao.BaseDAO;
 import com.suw.entity.Answer;
+import com.suw.entity.Comment;
 import com.suw.service.AnswerService;
 
 @Service("answerService")
@@ -26,5 +28,26 @@ public class AnswerServiceImpl implements AnswerService {
 		baseDAO.save(answer);
 	}
 
+	@Override
+	@Transactional
+	public Answer vote(int answerid, int voteValue) {
+		Answer answer = baseDAO.get(Answer.class, answerid);
+		answer.setVote(answer.getVote()+voteValue);
+		baseDAO.update(answer);
+		return answer;
+	}
+
+	@Override
+	public Answer update(int id,String body) {
+		Answer answer = baseDAO.get(Answer.class, id);
+		answer.setBody(body);
+//		baseDAO.update(answer);
+		return answer;
+	}
+
+	@Override
+	public Answer get(int answerId) {
+		return baseDAO.get(Answer.class, answerId);
+	}
 	
 }

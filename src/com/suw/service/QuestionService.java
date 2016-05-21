@@ -17,4 +17,6 @@ public interface QuestionService {
 	public Question vote(int questionId, int vote);
 	
 	public void save(Question question);
+	
+	public List<Question> search(Question question,int currentPage);
 }

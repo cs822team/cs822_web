@@ -121,7 +121,7 @@ public class BaseDAOImpl<T> implements BaseDAO<T> {
 		return q.setFirstResult((page - 1) * rows).setMaxResults(rows).list();
 	}
 
-	public List<T> find(String hql, List<Object> param, Integer page, Integer rows) {
+	public List<T> find(String hql, List<Object> param, Integer page, Integer rows,String type) {
 		if (page == null || page < 1) {
 			page = 1;
 		}
@@ -129,9 +129,17 @@ public class BaseDAOImpl<T> implements BaseDAO<T> {
 			rows = 10;
 		}
 		Query q = this.getCurrentSession().createQuery(hql);
-		if (param != null && param.size() > 0) {
-			for (int i = 0; i < param.size(); i++) {
-				q.setParameter(i, param.get(i));
+		if(type=="search"){
+			if (param != null && param.size() > 0) {
+				for (int i = 0; i < param.size(); i++) {
+					q.setParameter(i, "%"+param.get(i)+"%");
+				}
+			}
+		}else{
+			if (param != null && param.size() > 0) {
+				for (int i = 0; i < param.size(); i++) {
+					q.setParameter(i, param.get(i));
+				}
 			}
 		}
 		return q.setFirstResult((page - 1) * rows).setMaxResults(rows).list();
@@ -209,6 +217,18 @@ public class BaseDAOImpl<T> implements BaseDAO<T> {
 			}
 		}
 		return q.executeUpdate();
+	}
+
+	@Override
+	public void delete(String hql, Object[] param) {
+		Query q = this.getCurrentSession().createQuery(hql);
+		if (param != null && param.length > 0) {
+			for (int i = 0; i < param.length; i++) {
+				q.setParameter(i, param[i]);
+			}
+		}
+		q.executeUpdate();
+		
 	}
 
 }

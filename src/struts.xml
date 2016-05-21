@@ -17,5 +17,7 @@
 	<include file="./com/suw/action/questionAjax.xml" />
 	<include file="./com/suw/action/target.xml" />
 	<include file="./com/suw/action/comment.xml" />
+	<include file="./com/suw/action/answerAjax.xml" />
+	<include file="./com/suw/action/answer.xml" />
 	
 </struts> 

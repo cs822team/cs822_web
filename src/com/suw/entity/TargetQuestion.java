@@ -56,6 +56,12 @@ public class TargetQuestion {
 	public void setId(int id) {
 		this.id = id;
 	}
+	public TargetQuestion(int targetId, int questionId) {
+		super();
+		this.targetId = targetId;
+		this.questionId = questionId;
+	}
+	
 	
 	
 	

@@ -1,5 +1,6 @@
 package com.suw.service.impl;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -12,6 +13,8 @@ import com.mysql.jdbc.ResultSet;
 import com.suw.dao.BaseDAO;
 import com.suw.entity.Question;
 import com.suw.entity.RandomQuestion;
+import com.suw.entity.Target;
+import com.suw.entity.TargetQuestion;
 import com.suw.service.QuestionService;
 
 @Service("questionService")
@@ -19,6 +22,8 @@ public class QuestionServiceImpl implements QuestionService {
 	
 	@Resource
 	private BaseDAO<Question> baseDAO;
+	
+	
 	
 	@Override
 	public List<Question> findListAll(int pageNumber, int limitation){
@@ -73,5 +78,51 @@ public class QuestionServiceImpl implements QuestionService {
 		q.setVote(q.getVote()+vote);
 		baseDAO.update(q);
 		return q;
+	}
+
+	@Override
+	@Transactional
+	public List<Question> search(Question question,int currentPage) {
+		List<Object> params = new ArrayList<Object>();
+		StringBuffer hql = new StringBuffer("from Question q where");
+		if(!(null == question.getBody() || ""==question.getBody().trim())){
+			String[] split = question.getBody().split(" ");
+			for(int i=0;i<split.length;i++){
+				if(split[i].trim() != ""){
+					hql.append(" q.body like ? or");
+					params.add(split[i].trim());
+				}
+			}
+		}
+		if(!(null == question.getBody() || ""==question.getBody().trim())){
+			String[] split = question.getBody().split(" ");
+			for(int i=0;i<split.length;i++){
+				if(split[i].trim() != ""){
+					hql.append(" q.title like ? or");
+					params.add(split[i].trim());
+				}
+			}
+		}
+		if(!(null == question.getTags() || ""==question.getTags().trim())){
+			String[] split = question.getTags().split(",");
+			for(int i=0;i<split.length;i++){
+				if(split[i].trim() != ""){
+					hql.append(" q.tags like ? or");
+					params.add(split[i].trim());
+				}
+			}
+		}
+		int length = hql.length();
+//		System.out.println(hql);
+		if(hql.indexOf("or", length-2)>0){
+			hql.delete(length-2, length);
+		}
+		if(hql.indexOf("where", length-5)>0){
+			hql.delete(length-5, length);
+		}
+		System.out.println(hql);
+		List<Question> questions = baseDAO.find(hql.toString(),params,currentPage,10,"search");
+		
+		return questions;
 	}
 }

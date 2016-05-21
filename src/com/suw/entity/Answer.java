@@ -35,6 +35,8 @@ public class Answer {
 	private String  body;
 	private int ownerUserId;
 	private int commentCount;
+	private int vote;
+	
 	
 	private List<Comment> coments;
 	private String displayName;
@@ -81,6 +83,10 @@ public class Answer {
 	public int getParentID() {
 		return parentID;
 	}
+	@Column(name="vote")
+	public int getVote() {
+		return vote;
+	}
 	
 	public void setId(int id) {
 		this.id = id;
@@ -123,6 +129,9 @@ public class Answer {
 	}
 	public void setDisplayName(String displayName) {
 		this.displayName = displayName;
+	}
+	public void setVote(int vote) {
+		this.vote = vote;
 	}
 	
 	

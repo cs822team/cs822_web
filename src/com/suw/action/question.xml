@@ -20,6 +20,9 @@
 	 	<action name="addQuestion" class="com.suw.action.QuestionAction" method="add">
 	 		<result name="success">/index.jsp</result>
 	 	</action>
+	 	<action name="search" class="com.suw.action.QuestionAction" method="search">
+	 		<result name="success" >/search.jsp</result>
+	 	</action>
 	 	
 	 </package>
 	 

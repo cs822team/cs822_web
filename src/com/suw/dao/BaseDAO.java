@@ -25,6 +25,7 @@ public interface BaseDAO<T> {
 	 * @param o
 	 */
 	public void delete(T o);
+	public void delete(String hql,Object[] param);
 
 	/**
 	 * 更新一个对象
@@ -97,7 +98,7 @@ public interface BaseDAO<T> {
 	 * @param rows
 	 * @return
 	 */
-	public List<T> find(String hql, List<Object> param, Integer page, Integer rows);
+	public List<T> find(String hql, List<Object> param, Integer page, Integer rows, String type);
 
 	/**
 	 * 获得一个对象

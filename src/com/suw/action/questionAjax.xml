@@ -18,6 +18,12 @@
 	 	<action name="vote" class="com.suw.action.QuestionAction" method="vote">
 	 		<result name="success" type="json"></result>
 	 	</action>
+	 	<action name="favourite" class="com.suw.action.QuestionAction" method="favourite">
+	 		<result name="success" type="json"></result>
+	 	</action>
+	 	<action name="unfavourite" class="com.suw.action.QuestionAction" method="unfavourite">
+	 		<result name="success" type="json"></result>
+	 	</action>
 	 </package>
 	 
 	 

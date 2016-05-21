@@ -27,7 +27,9 @@
 		<property name="initialPoolSize" value="1"></property>
 		<property name="maxIdleTime" value="20"></property>
 	</bean>
-	
+	<!-- test -->
+
+    
 	<!-- session工厂 -->
 	<bean id="sessionFactory"
 		class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
@@ -84,4 +86,7 @@
 	<!-- 自动加载构建bean -->
 	<context:component-scan base-package="com.suw" />
 
+
+	
+	
 </beans>

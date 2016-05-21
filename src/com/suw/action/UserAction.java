@@ -48,8 +48,8 @@ public class UserAction{
 		
 		initSessionAndRequest();
 		user.setPassword(Util.md5Encryption(user.getPassword()));
+		user.setEmail(user.getDisplayName());
 		user = 	userService.findUser(user);
-		System.out.println(remember);
 		if(remember==1){
 			ServletActionContext.getResponse().addCookie(CookieUtils.addCookie(user.getDisplayName()));
 		}
@@ -61,7 +61,6 @@ public class UserAction{
 			
 			session.put("user", user);
 			if(null != returnPath && returnPath.indexOf("question")>=0){
-				System.out.println("question");
 				return "question";
 			}
 			return "success";
@@ -87,8 +86,6 @@ public class UserAction{
 		User temp;
 		if(user.getPassword()!="" && user.getPassword()!=null){
 			temp = userService.findUser(user);
-		}else if(user.getDisplayName()!="" && user.getDisplayName()!=null){
-			temp = userService.findUserByDisplayName(user.getDisplayName());
 		}else{
 			temp = userService.findUserByEmail(user.getEmail());
 		}
