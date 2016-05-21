@@ -35,13 +35,13 @@
 
 
 <script type="text/javascript">
-	$(document)
-			.ready(
-					function() {
-
+	$(document).ready(function() {
 						var path = $("#path").val();
 						$(function() {
 							$("#returnPath").val(
+									window.location.pathname
+											+ window.location.search);
+							$("#returnPath2").val(
 									window.location.pathname
 											+ window.location.search);
 							$("#smallGroup")
@@ -74,16 +74,12 @@
 										}
 									});
 						});
-						$("#editor")
-								.focus(
-										function() {
+						$("#editor").focus(function() {
 											if ($("#editor").html().trim() == "Write answer at here...keep cool") {
 												$("#editor").html("");
 											}
 										});
-						$("#editor")
-								.blur(
-										function() {
+						$("#editor").blur(function() {
 											if ($("#editor").html().trim() == "") {
 												$("#editor")
 														.html(
@@ -208,6 +204,7 @@
 																					i,
 																					value) {
 																				var htmlCode = "<div class='alert alert-success' role='alert' style='margin-bottom: 0px;'>"
+																						+ "<h4>" + $("#userDisplayname").val() +"</h4>&nbsp;&nbsp;&nbsp;&nbsp;"
 																						+ value.text
 																						+ "</div>";
 																				$(
@@ -303,15 +300,114 @@
 														});
 											}
 										});
+						$("#collect").hover(function(){
+							$("#collectSpan").removeClass("hidden");
+						},function(){
+							$("#collectSpan").addClass("hidden");
+						});
+						$("#collect").click(function(){
+							/* if($("#collect").hasClass("btn-success")){
+								$("#collect").removeClass("btn-success");
+								$("#collect").addClass("btn-default");
+							}else{
+								$("#collect").removeClass("btn-default");
+								$("#collect").removeClass("btn-success");
+								$("#collect").addClass("btn-success");
+							} */
+							/* var flag = $("#collect").hasClass("btn-success"); */
+							if($("#userId").val()==""){
+								alert("please login first");
+								return;
+							}
+							var realPath;
+							if(!$("#collect").hasClass("btn-success")){
+								realPath = path
+								+ '/question/favourite.action?favourite.questionId='+$("#questionId").val()+'&favourite.userId='+$("#userId").val();
+							}else{
+								realPath = path
+								+ '/question/unfavourite.action?favourite.questionId='+$("#questionId").val()+'&favourite.userId='+$("#userId").val();
+							}
+							$.ajax({
+								url : realPath,
+								type : 'POST',
+								data : "",
+								dataType : 'json',
+								success : function(data) {
+									if($("#collect").hasClass("btn-success")){
+										$("#collect").removeClass("btn-success");
+										$("#collect").addClass("btn-default");
+									}else{
+										$("#collect").removeClass("btn-default");
+										$("#collect").removeClass("btn-success");
+										$("#collect").addClass("btn-success");
+									}
+								}
+							});
+						});
+						
+						
+						$("button[id^='ForAnswer']").click(function() {
+							var voteValue = $(this).attr("id").indexOf("Up")>0?1:-1;
+							$.ajax({
+										url : path
+												+ '/answer/vote.action?voteValue='+voteValue+'&answer.id='
+												+ $(this).val(),
+										type : 'POST',
+										data : "",
+										dataType : 'json',
+										success : function(data) {
+											$("#voteNumberForAnswer")
+													.html(
+															parseInt($(
+																	"#voteNumberForAnswer")
+																	.html())+voteValue);
+										}
+									});
+								});
+						 
+						$("button[id^='editAnswer_']").on("click",function() {
+							var id = $(this).attr("id").replace("editAnswer","answerBodyForEdit");
+							$("#editor").html($("#"+id).text().trim());
+							$("#updateAnswer").removeClass("hidden");
+							$("#undoUpdateAnswer").removeClass("hidden");
+							$("#submitAnswer").addClass("hidden");
+							$("#answerForm").attr("action", path+"/answer/updateAnswer.action");
+							$("#answerId").val($(this).val());
+							
+							}); 
+						$("#undoUpdateAnswer").click(function() {
+							$("#editor").html("Write answer at here...keep cool");
+							$("#updateAnswer").addClass("hidden");
+							$("#undoUpdateAnswer").addClass("hidden");
+							$("#submitAnswer").removeClass("hidden");
+							$("#answerForm").attr("action", path+"/question/addAnswer.action");
+							$("#updateOoNot").val("0");
+							}); 
+						
+						
+						
+						
+						$("#updateAnswer").click(function() {
+							$("#answerBody").val($("#editor").html());
+							
+							}); 
+						
+				
+						
+						
+						
 					});
 </script>
 
 </head>
 <body style="position: relative;">
-
+	
 	<input id="path" type="hidden"
 		value="${pageContext.request.contextPath }" />
-	<input type="text" class="hidden" id="userId" value="${user.id }" />
+	<input type="text"  class="hidden" id="userId" value="${user.id }" />
+	<input type="text"  class="hidden" id="fa" value="${fa }" />
+	<input type="text" class="hidden" id="userDisplayname"
+		value="${user.displayName }" />
 	<input type="text" class="hidden" id="questionId"
 		value="${question.id }" />
 	<div class="container">
@@ -319,7 +415,8 @@
 		<div class="row">
 			<div class="col-md-12">
 				<ul id="headnav" class="nav nav-pills">
-					<li class="active"><a href="${pageContext.request.contextPath }/index.jsp">LOGO</a></li>
+					<li class="active"><a
+						href="${pageContext.request.contextPath }/index.jsp">LOGO</a></li>
 					<form class="form-search navbar-left drdropdown pull-right">
 						<input class="input-medium search-query" type="text"
 							placeholder="Search  U Want" />
@@ -353,7 +450,26 @@
 		</div>
 		<div
 			style="position: fixed; top: 220px; left: 20px; width: 300px; height: 300px;">
+			<s:if test="#request.fa">
+			<button type="button" class="btn btn-success "
+				aria-label="Left Align" id="collect">
+				<span class="glyphicon glyphicon glyphicon glyphicon-star-empty"
+					aria-hidden="true"></span> <span id="collectSpan" class="hidden">
+					Favourite </span>
+			</button>
+			</s:if>
+			<s:else>
 			<button type="button" class="btn btn-default "
+				aria-label="Left Align" id="collect">
+				<span class="glyphicon glyphicon glyphicon glyphicon-star-empty"
+					aria-hidden="true"></span> <span id="collectSpan" class="hidden">
+					Favourite </span>
+			</button>
+			</s:else>
+			
+			<br /> <br />
+
+			<button type="button" class="btn btn-success "
 				aria-label="Left Align" id="thumbUp">
 				<span class="glyphicon glyphicon glyphicon-thumbs-up"
 					aria-hidden="true"></span>
@@ -363,7 +479,7 @@
 				<span class="label label-info" id="voteNumber">${request.question.vote}</span>
 			</h3>
 			<br /> <br />
-			<button type="button" class="btn btn-default "
+			<button type="button" class="btn btn-success "
 				aria-label="Left Align" id="thumbDown">
 				<span class="glyphicon glyphicon glyphicon-thumbs-down"
 					aria-hidden="true"></span>
@@ -434,81 +550,132 @@
 				<div style="margin-top: -27px;">
 					<span id="addComment" class="label label-success pull-right">addComment</span>
 				</div>
-				
-				
+
+
 				<h2>Answers</h2>
 				<BR />
-						<s:iterator var="as" value="#request.question.answers" status="st">
-							<tr class="danger">
-								<div class="bs-example" data-example-id="media-list">
-									<ul class="media-list">
-										<li class="media">
-											<div class="media-left">
-												<a href="#"> <img class="media-object"
-													data-src="holder.js/64x64" alt="64x64"
-													src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9InllcyI/PjxzdmcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB3aWR0aD0iNjQiIGhlaWdodD0iNjQiIHZpZXdCb3g9IjAgMCA2NCA2NCIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSI+PCEtLQpTb3VyY2UgVVJMOiBob2xkZXIuanMvNjR4NjQKQ3JlYXRlZCB3aXRoIEhvbGRlci5qcyAyLjYuMC4KTGVhcm4gbW9yZSBhdCBodHRwOi8vaG9sZGVyanMuY29tCihjKSAyMDEyLTIwMTUgSXZhbiBNYWxvcGluc2t5IC0gaHR0cDovL2ltc2t5LmNvCi0tPjxkZWZzPjxzdHlsZSB0eXBlPSJ0ZXh0L2NzcyI+PCFbQ0RBVEFbI2hvbGRlcl8xNTQ4YjA5ODA4NCB0ZXh0IHsgZmlsbDojQUFBQUFBO2ZvbnQtd2VpZ2h0OmJvbGQ7Zm9udC1mYW1pbHk6QXJpYWwsIEhlbHZldGljYSwgT3BlbiBTYW5zLCBzYW5zLXNlcmlmLCBtb25vc3BhY2U7Zm9udC1zaXplOjEwcHQgfSBdXT48L3N0eWxlPjwvZGVmcz48ZyBpZD0iaG9sZGVyXzE1NDhiMDk4MDg0Ij48cmVjdCB3aWR0aD0iNjQiIGhlaWdodD0iNjQiIGZpbGw9IiNFRUVFRUUiLz48Zz48dGV4dCB4PSIxMy40Njg3NSIgeT0iMzYuNSI+NjR4NjQ8L3RleHQ+PC9nPjwvZz48L3N2Zz4="
-													data-holder-rendered="true"
-													style="width: 64px; height: 64px;">
-												</a>
-											</div>
-											<div class="media-body">
-												<h4 class="media-heading">
-													<s:property value="#as.displayName" />
-												</h4>
-												<p>
-													<s:property value="#as.body" escape="false" />
-												</p>
-												<s:if test="#request.question.acceptedAnswerId==null || #request.question.acceptedAnswerId==''">
-													<button type="button" class="btn btn-default btn-sm"">
-  														<span class="glyphicon glyphicon-heart-empty"-star" aria-hidden="true"></span> Accept
-													</button>
-												</s:if>
-												<s:elseif test="#request.question.acceptedAnswerId==#as.id">
-													<button type="button" class="btn btn-default btn-sm"">
-  														<span class="glyphicon glyphicon-heart"-star" aria-hidden="true"></span> Accepted
-													</button>
-												</s:elseif>
-												<!-- Nested media object -->
-												<s:iterator var="ac" value="#as.coments" status="ast">
-												 	<div class="media">
-														<div class="media-left">
-															<a href="#"> <img class="media-object"
-																data-src="holder.js/64x64" alt="64x64"
-																src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9InllcyI/PjxzdmcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB3aWR0aD0iNjQiIGhlaWdodD0iNjQiIHZpZXdCb3g9IjAgMCA2NCA2NCIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSI+PCEtLQpTb3VyY2UgVVJMOiBob2xkZXIuanMvNjR4NjQKQ3JlYXRlZCB3aXRoIEhvbGRlci5qcyAyLjYuMC4KTGVhcm4gbW9yZSBhdCBodHRwOi8vaG9sZGVyanMuY29tCihjKSAyMDEyLTIwMTUgSXZhbiBNYWxvcGluc2t5IC0gaHR0cDovL2ltc2t5LmNvCi0tPjxkZWZzPjxzdHlsZSB0eXBlPSJ0ZXh0L2NzcyI+PCFbQ0RBVEFbI2hvbGRlcl8xNTQ4YjA5ODI5YiB0ZXh0IHsgZmlsbDojQUFBQUFBO2ZvbnQtd2VpZ2h0OmJvbGQ7Zm9udC1mYW1pbHk6QXJpYWwsIEhlbHZldGljYSwgT3BlbiBTYW5zLCBzYW5zLXNlcmlmLCBtb25vc3BhY2U7Zm9udC1zaXplOjEwcHQgfSBdXT48L3N0eWxlPjwvZGVmcz48ZyBpZD0iaG9sZGVyXzE1NDhiMDk4MjliIj48cmVjdCB3aWR0aD0iNjQiIGhlaWdodD0iNjQiIGZpbGw9IiNFRUVFRUUiLz48Zz48dGV4dCB4PSIxMy40Njg3NSIgeT0iMzYuNSI+NjR4NjQ8L3RleHQ+PC9nPjwvZz48L3N2Zz4="
-																data-holder-rendered="true"
-																style="width: 64px; height: 64px;">
-															</a>
-														</div>
-													<div class="media-body">
-									                  	<h4 class="media-heading">
-															<s:property value="#ac.displayName" />
-													  	</h4>
-														<p>
+				<s:iterator var="as" value="#request.question.answers" status="st">
+					<tr class="danger">
+						<div class="bs-example" data-example-id="media-list">
+							<ul class="media-list">
+								<li class="media">
+									<div class="media-left">
+										<a href="#"> <img class="media-object"
+											data-src="holder.js/64x64" alt="64x64"
+											src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9InllcyI/PjxzdmcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB3aWR0aD0iNjQiIGhlaWdodD0iNjQiIHZpZXdCb3g9IjAgMCA2NCA2NCIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSI+PCEtLQpTb3VyY2UgVVJMOiBob2xkZXIuanMvNjR4NjQKQ3JlYXRlZCB3aXRoIEhvbGRlci5qcyAyLjYuMC4KTGVhcm4gbW9yZSBhdCBodHRwOi8vaG9sZGVyanMuY29tCihjKSAyMDEyLTIwMTUgSXZhbiBNYWxvcGluc2t5IC0gaHR0cDovL2ltc2t5LmNvCi0tPjxkZWZzPjxzdHlsZSB0eXBlPSJ0ZXh0L2NzcyI+PCFbQ0RBVEFbI2hvbGRlcl8xNTQ4YjA5ODA4NCB0ZXh0IHsgZmlsbDojQUFBQUFBO2ZvbnQtd2VpZ2h0OmJvbGQ7Zm9udC1mYW1pbHk6QXJpYWwsIEhlbHZldGljYSwgT3BlbiBTYW5zLCBzYW5zLXNlcmlmLCBtb25vc3BhY2U7Zm9udC1zaXplOjEwcHQgfSBdXT48L3N0eWxlPjwvZGVmcz48ZyBpZD0iaG9sZGVyXzE1NDhiMDk4MDg0Ij48cmVjdCB3aWR0aD0iNjQiIGhlaWdodD0iNjQiIGZpbGw9IiNFRUVFRUUiLz48Zz48dGV4dCB4PSIxMy40Njg3NSIgeT0iMzYuNSI+NjR4NjQ8L3RleHQ+PC9nPjwvZz48L3N2Zz4="
+											data-holder-rendered="true"
+											style="width: 64px; height: 64px;">
+										</a>
+									</div>
+									<div class="media-body" >
+										<h4 class="media-heading">
+											<s:property value="#as.displayName" />
+										</h4>
+										<div id="answerBodyForEdit_<s:property value="#st.index" />">
+											<s:property value="#as.body" escape="false" />
+										</div>
+										
+						
+
+
+
+
+										
+
+
+										<div style="width: 100%; float: right;">
+											<button type="button" class="btn btn-success btn-xs"
+												style="float: right;" aria-label="Left Align"
+												id="ForAnswerThumbDown" value="<s:property value="#as.id" />">
+												<span class="glyphicon glyphicon glyphicon-thumbs-down"
+													aria-hidden="true"></span>
+											</button>
+											
+											<span class="label label-info" id="voteNumberForAnswer"
+												style="float: right;"><s:property value="#as.vote" /></span>
+											
+											<button type="button" class="btn btn-success btn-xs"
+												style="float: right;" aria-label="Left Align"
+												id="ForAnswerThumbUp" value="<s:property value="#as.id" />">
+												<span class="glyphicon glyphicon glyphicon-thumbs-up"
+													aria-hidden="true"></span>
+											</button>
+											<s:if
+											test="#as.ownerUserId==#session.user.id">
+											<button type="button" class="btn btn-success btn-xs"
+												style="float: right;" aria-label="Left Align"
+												id="editAnswer_<s:property value="#st.index" />" value="<s:property value="#as.id" />">
+												<span class="glyphicon glyphicon glyphicon-pencil"
+													aria-hidden="true"></span>
+											</button>
+											
+										</s:if>
+										</div>
+										
+										
+										
+
+
+
+
+
+
+
+
+										<s:if
+											test="#request.question.acceptedAnswerId==null || #request.question.acceptedAnswerId==''">
+											<button type="button" class="btn btn-success btn-sm">
+												<span class="glyphicon glyphicon-heart-empty-star"
+													aria-hidden="true"></span> Accept
+											</button>
+										</s:if>
+										<s:elseif test="#request.question.acceptedAnswerId==#as.id">
+											<button type="button" class="btn btn-danger btn-sm">
+												<span class="glyphicon glyphicon-heart " aria-hidden="true"></span>
+												Accepted
+											</button>
+										</s:elseif>
+										<!-- Nested media object -->
+										<s:iterator var="ac" value="#as.coments" status="ast">
+											<div class="media">
+												<div class="media-left">
+													<a href="#"> <img class="media-object"
+														data-src="holder.js/64x64" alt="64x64"
+														src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9InllcyI/PjxzdmcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB3aWR0aD0iNjQiIGhlaWdodD0iNjQiIHZpZXdCb3g9IjAgMCA2NCA2NCIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSI+PCEtLQpTb3VyY2UgVVJMOiBob2xkZXIuanMvNjR4NjQKQ3JlYXRlZCB3aXRoIEhvbGRlci5qcyAyLjYuMC4KTGVhcm4gbW9yZSBhdCBodHRwOi8vaG9sZGVyanMuY29tCihjKSAyMDEyLTIwMTUgSXZhbiBNYWxvcGluc2t5IC0gaHR0cDovL2ltc2t5LmNvCi0tPjxkZWZzPjxzdHlsZSB0eXBlPSJ0ZXh0L2NzcyI+PCFbQ0RBVEFbI2hvbGRlcl8xNTQ4YjA5ODI5YiB0ZXh0IHsgZmlsbDojQUFBQUFBO2ZvbnQtd2VpZ2h0OmJvbGQ7Zm9udC1mYW1pbHk6QXJpYWwsIEhlbHZldGljYSwgT3BlbiBTYW5zLCBzYW5zLXNlcmlmLCBtb25vc3BhY2U7Zm9udC1zaXplOjEwcHQgfSBdXT48L3N0eWxlPjwvZGVmcz48ZyBpZD0iaG9sZGVyXzE1NDhiMDk4MjliIj48cmVjdCB3aWR0aD0iNjQiIGhlaWdodD0iNjQiIGZpbGw9IiNFRUVFRUUiLz48Zz48dGV4dCB4PSIxMy40Njg3NSIgeT0iMzYuNSI+NjR4NjQ8L3RleHQ+PC9nPjwvZz48L3N2Zz4="
+														data-holder-rendered="true"
+														style="width: 64px; height: 64px;">
+													</a>
+												</div>
+												<div class="media-body">
+													<h4 class="media-heading">
+														<s:property value="#ac.displayName" />
+													</h4>
+													<p>
 														<s:property value="#ac.text" escape="false" />
-														</p>
-													</div>
-												</s:iterator>
-											</div>
-										</li>
-									</ul>
-								</div>
-							</tr>
-						</s:iterator>
-					<table class="table">
+													</p>
+												</div>
+										</s:iterator>
+									</div>
+								</li>
+							</ul>
+						</div>
+					</tr>
+				</s:iterator>
+				<table class="table">
 					<tbody>
 						<tr>
 							<td>
 								<h1>Write Answer</h1>
 								<div class="btn-toolbar" data-role="editor-toolbar"
 									data-target="#editor">
-									
-									
+
+
 									<div class="btn-group">
 										<a class="btn" data-edit="bold" title="Bold (Ctrl/Cmd+B)"><i
 											class="icon-bold"></i></a> <a class="btn" data-edit="italic"
 											title="Italic (Ctrl/Cmd+I)"><i class="icon-italic"></i></a>
 									</div>
-									
+
 									<div class="btn-group">
 										<a class="btn dropdown-toggle" data-toggle="dropdown"
 											title="Hyperlink"><i class="icon-link"></i></a>
@@ -534,15 +701,30 @@
 								<div id="editor" contenteditable="true">Write answer at here...keep cool</div>
 								<div class="form-group">
 									<form method="post"
-										action="${pageContext.request.contextPath }/question/addAnswer.action">
+										action="${pageContext.request.contextPath }/question/addAnswer.action" id="answerForm">
 										<input type="text" class="hidden" id="answerBody"
 											name="answer.body" /> <input type="text" class="hidden"
 											name="question.id" value="${request.question.id }">
+											<input type="text" class="hidden"
+											name="answer.parentID" value="${request.question.id }">
+										 <input type="text" class="hidden" id="answerId"
+											name="answerId" value="0">
+											<input type="text" name="returnPath" value="123" class="hidden"
+								id="returnPath2" />
 										<button class="btn btn-default drdropdown pull-left"
 											id="submitAnswer">
 											<span class="glyphicon glyphicon-edit">Submit Answer</span>
 										</button>
+										<button class="btn btn-default drdropdown pull-left hidden"
+											id="updateAnswer">
+											<span class="glyphicon glyphicon-edit">Update Answer</span>
+										</button>
 									</form>
+									
+										<button class="btn btn-default drdropdown pull-left hidden"
+											id="undoUpdateAnswer">
+											<span class="glyphicon glyphicon-edit">Undo</span>
+										</button>
 								</div>
 							</td>
 
@@ -557,28 +739,34 @@
 				<div class="jumbotron">
 					<h2>Find Why?</h2>
 					<p>
-						<a class="btn btn-primary btn-lg" href="#" role="button">ask
+						<a class="btn btn-primary btn-lg" href="ask.jsp" role="button">ask
 							question</a>
 					</p>
 				</div>
-					<div class="container-fluid">
-				        <div class="navbar-header">
-				          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-4" aria-expanded="false">
-				            <span class="sr-only">Toggle navigation</span>
-				            <span class="icon-bar"></span>
-				            <span class="icon-bar"></span>
-				            <span class="icon-bar"></span>
-				          </button>
-				          <a class="navbar-brand" href="#">Help</a>
-				        </div>
-				        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-4">
-				          <p class="navbar-text" style="color: #286090;">If you want to add code, please add a symbol of 	&lt;code&gt; int a=0;&lt;/code&gt;</p>
-				          <p class="navbar-text" style="color: #286090;">comment can not add code</p>
-				          <p class="navbar-text" style="color: #286090;">Please follow the law</p>
-				        </div>
-				      </div>
+				<div class="container-fluid">
+					<div class="navbar-header">
+						<button type="button" class="navbar-toggle collapsed"
+							data-toggle="collapse"
+							data-target="#bs-example-navbar-collapse-4" aria-expanded="false">
+							<span class="sr-only">Toggle navigation</span> <span
+								class="icon-bar"></span> <span class="icon-bar"></span> <span
+								class="icon-bar"></span>
+						</button>
+						<a class="navbar-brand" href="#">Help</a>
+					</div>
+					<div class="collapse navbar-collapse"
+						id="bs-example-navbar-collapse-4">
+						<p class="navbar-text" style="color: #286090;">If you want to
+							add code, please add a symbol of &lt;code&gt; int
+							a=0;&lt;/code&gt;</p>
+						<p class="navbar-text" style="color: #286090;">comment can not
+							add code</p>
+						<p class="navbar-text" style="color: #286090;">Please follow
+							the law</p>
+					</div>
+				</div>
 				<table width="27%" class="table table-striped">
-				
+
 					<thead>
 						<tr>
 							<div class="btn-group ">
@@ -653,13 +841,14 @@
 						<form class="form-horizontal" role="form"
 							action="${pageContext.request.contextPath }/user/login.action"
 							method="post">
-							<input type="text" name="returnPath" value="123" id="returnPath" />
+							<input type="text" name="returnPath" value="123" class="hidden"
+								id="returnPath" />
 							<div class="form-group">
 								<label for="usertname" class="col-sm-2 control-label">name</label>
 								<div class="col-sm-10">
 									<input type="text" class="form-control" id="username"
 										name="user.displayName"
-										placeholder="please input your displayname or email ">
+										placeholder="please input your  email ">
 								</div>
 							</div>
 							<div class="form-group">

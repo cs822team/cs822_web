@@ -217,6 +217,22 @@
 		        });
 			});
 			
+			
+			
+			
+			
+			
+
+			 $('#headnav').delegate('[id="but1"]', 'click', function() {
+				 alert(1);
+				 location.href = $("#path").val()+'/question/search.action?body='+$("#path").val();
+			 });
+			
+			
+			
+			
+			
+			
 			$(":submit[id^='tijiao_']").click(function(check){ 
 				var temp=0;
 				if($("#susername").val()=="" || $("#susername").val()==null){
@@ -322,18 +338,11 @@
 					var password = $("#inputPassword").val();
 					$.ajax({  
 						contentType:"UTF-8",
-			            url:path+'/user/checkuser.action?user.displayName='+name+'&user.email='+name+'&user.password='+password,  
+			            url:path+'/user/checkuser.action?user.email='+name+'&user.password='+password,  
 			            type:'POST',  
 			            data:"", 
 			            dataType:'json',  
 			            success:function (data) {
-			            	if(data[0].id!=0){
-			            		return true;
-			            		
-			            	}else{
-			            		$("#showLoginMessage").html(" <spane class='alert alert-danger' role='alert'>Username or password is wrong!!!</span>");
-			            		return false;
-			            	}
 			            }  
 			            
 			        });
@@ -424,8 +433,8 @@
 		            success:function (data) {
 		            	var hemlvar="";
 		            	hemlvar+="<li class='active'><a href='#'>LOGO</a></li>";
-		            	hemlvar+="<form class='form-search navbar-left drdropdown pull-right'>";
-		            	hemlvar+="<input class='input-medium search-query' type='text' placeholder='Search  U Want'/> <button type='submit' class='btn btn-primary' id='but1'><span class='glyphicon glyphicon-search'></span>SEARCH</button>";
+		            	hemlvar+="<form class='form-search navbar-left drdropdown pull-right' action='"+path+"/question/search.action'>";
+		            	hemlvar+="<input class='input-medium search-query' name='question.body' type='text' placeholder='Search  U Want'/> <button type='submit' class='btn btn-primary' id='but1'><span class='glyphicon glyphicon-search'></span>SEARCH</button>";
 		            	hemlvar+="  </form>";
 		            	hemlvar+="<li class='dropdown pull-right'>";
 		            	hemlvar+="<a class='dropdown-toggle' data-toggle='dropdown' href='#'>";
@@ -461,9 +470,9 @@
 			<div class="col-md-12">
 				<ul id="headnav" class="nav nav-pills">
 					<li class="active"><a href="#">LOGO</a></li>
-					<form class="form-search navbar-left drdropdown pull-right">
+					<form class="form-search navbar-left drdropdown pull-right" action="${pageContext.request.contextPath }/question/search.action">
 						<input class="input-medium search-query" type="text"
-							placeholder="Search  U Want" />
+							placeholder="Search  U Want" name='question.body' />
 						<button type="submit" class="btn btn-primary" id="but1">
 							<span class="glyphicon glyphicon-search"></span>SEARCH
 						</button>
@@ -518,7 +527,7 @@
 				<div class="jumbotron">
 					<h1>Find Why?</h1>
 					<p>
-						<a class="btn btn-primary btn-lg" href="#" role="button">ask
+						<a class="btn btn-primary btn-lg" href="ask.jsp" role="button">ask
 							question</a>
 					</p>
 				</div>
@@ -589,7 +598,7 @@
 							<div class="col-sm-10">
 								<input type="text" class="form-control" id="username"
 									name="user.displayName"
-									placeholder="please input your displayname or email ">
+									placeholder="please input your  email ">
 							</div>
 						</div>
 						<div class="form-group">
@@ -644,7 +653,7 @@
 							<label for="usertname" class="col-sm-2 control-label">name</label>
 							<div class="col-lg-5 ">
 								<input type="text" class="form-control " name="user.displayName"
-									id="susername" placeholder="input your username/email)">
+									id="susername" placeholder="input your email)">
 							</div>
 							<div id="ssusername" class="col-sm-5"></div>
 						</div>
