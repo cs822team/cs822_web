@@ -77,7 +77,9 @@
         </br>
         </br>
  	    <p>   
-        <button type="button" class="btn btn-primary btn-lg "> <span class="glyphicon glyphicon-pencil"></span>
+
+        <button type="button" class="btn btn-primary btn-lg " data-toggle="modal" 
+   data-target="#editmodel"> <span class="glyphicon glyphicon-pencil"></span>
       	Edit user profile
         </button>
         </p>
@@ -109,37 +111,78 @@
            </div>
            <div class="panel-body">
            
-                   
+  
 
-           
            <table class="table">
-           	  <th><span class="glyphicon glyphicon-star" >Reputation</span></th>
-              <th>Location</th>
-              <th>Major Tech</th>
-              <th>Questions</th>
-              <th>Answers</th>   
+
+              <th></th>
+              <th></th>
               <tr>
-              <td>1405</td>
-              <td>wollongong</td>
-              <td>java</td>
-              <td>15</td>
-              <td>4</td>
+
+							<td><B>id</B></td>
+              <td>23</td>
+			                </tr>
+							<tr>
+			                
+							<td><B>age</B></td>
+              <td>23</td>
+							</tr>
+							<tr>
+			                
+							<td><B>email</B></td>
+              <td>23@11.com</td>
+							</tr>
+							<tr>			  
+			                
+							<td><B>location</B></td>
+              <td>korea</td>
+							</tr>
+							<tr>
+			  
+			  <td><B>creation date</B></td>
+              <td>2012-1-1</td>
+							</tr>
+							<tr>
+			  
+			  <td><B>last_access_date</B></td>
+              <td>2015-1-1</td>
+
               </tr>
+
+
               
-           </table>
+           </table>        
+         
            
               <div class="panel panel-info">
               <div class="panel-heading">
                  <h4 class="panel-title">
                     <a data-toggle="collapse" data-parent="#accordion" 
                        href="#collapseFour">
-                       <span class ="glyphicon glyphicon-user">-About User-</span>
+                       <span class ="glyphicon glyphicon-user">-Q&A information-</span>
                     </a>
                  </h4>
               </div>
               <div id="collapseFour" class="panel-collapse collapse">
                  <div class="panel-body">
-                    I an a java engineer,and happy to make friends with others who intereting in coding!
+                     <table class="table">
+				      <th>view</th>
+					  <th>down vote</th>
+					  <th>up vote</th>
+					  <th>accept_answer</th>
+					  <th>reputatution</th>   
+					  <tr>
+
+					  <td>121</td>
+					  <td>23</td>
+					  <td>12</td>
+					  <td>9</td>
+					  <td>1234</td>
+					  </tr>
+
+
+					  
+				   </table>
                  </div>
               </div>
            </div>
@@ -222,6 +265,67 @@
          </div>
 
 </div> 
+
+	<div class="modal fade" id="editmodel" tabindex="-1" role="dialog"
+		aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-hidden="true">&times;</button>
+					<h4 class="modal-title" id="myModalLabel">Edit User Information</h4>
+				</div>
+				<div class="modal-body">
+					<form class="form-horizontal" role="form"
+						action="${pageContext.request.contextPath }/user/login.action"
+						method="post">
+						<div class="form-group">
+							<label for="usertname" class="col-sm-2 control-label">name</label>
+							<div class="col-sm-10">
+								<input type="text" class="form-control" id="username"
+									name="user.displayName"
+									placeholder="please input your  name ">
+							</div>
+						</div>
+						
+						<div class="form-group">
+							<label for="usertname" class="col-sm-2 control-label">age</label>
+							<div class="col-sm-10">
+								<input type="text" class="form-control" id="username"
+									name="user.displayName"
+									placeholder="please input your  age ">
+							</div>
+						</div>
+						
+						<div class="form-group">
+							<label for="usertname" class="col-sm-2 control-label">location</label>
+							<div class="col-sm-10">
+								<input type="text" class="form-control" id="username"
+									name="user.displayName"
+									placeholder="please input your  location ">
+							</div>
+						</div>
+						
+						
+						<div class="form-group">
+							<div class="col-sm-offset-2 col-sm-10">
+								<button type="submit" id="login" value="1"
+									class="btn btn-default">submit</button>
+							</div>
+						</div>
+					</form>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">close
+					</button>
+				</div>
+			</div>
+			<!-- /.modal-content -->
+		</div>
+		<!-- /.modal -->
+	</div>
+
+
    </body>
 
 </html>
